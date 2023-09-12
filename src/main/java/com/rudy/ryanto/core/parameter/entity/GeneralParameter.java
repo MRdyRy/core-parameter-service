@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity(name = "GENERAL_PARAMETER")
@@ -19,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class GeneralParameter {
 
+    @Id
     @Column(name = "KEY",nullable = false)
     private String key;
     @Column(name = "FEATURE_NAME",nullable = false)
