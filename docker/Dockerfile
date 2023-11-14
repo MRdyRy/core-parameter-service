@@ -10,7 +10,7 @@ RUN mvn verify -DskipTests
 RUN mvn clean install -DskipTests
 RUN ls -ltr
 
-FROM openjdk:11-alpine as RUN-APPS
+FROM openjdk:11 as RUN-APPS
 USER root
 LABEL DEVELOPER="ryanserfanru@gmail.com"
 LABEL APPS-NAME="core-parameter-service"
