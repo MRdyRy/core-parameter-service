@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: build and test
+name: build, test and push-img
 
 on:
   push:
@@ -16,6 +16,7 @@ on:
   pull_request_target:
     types:
       - closed
+      - merged
 
 jobs:
   if_merged:
@@ -42,12 +43,29 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-#      - name: verify
-#        run: mvn verify -DskipTests --file pom.xml
+          
+      - name: get version
+        shell: bash
+        run: echo project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
+        
+      - name: verify
+        run: mvn verify -DskipTests --file pom.xml
 
       - name: Build and Test
         run: mvn -B package -X -T 4 --file pom.xml
+        
+  push_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: docker-login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Build docker image
+        run: docker build --file Dockerfile --tag serfanrud/core-parameter-service:${{github.sha}}
 
-      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-#      - name: Update dependency graph
-#        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Docker push
+        run: docker push serfanrud/core-parameter-service:${{github.sha}}
