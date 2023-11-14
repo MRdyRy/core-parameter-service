@@ -48,8 +48,8 @@ jobs:
         shell: bash
         run: echo project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
         
-      - name: verify
-        run: mvn verify -DskipTests --file pom.xml
+      # - name: verify
+      #   run: mvn verify -DskipTests --file pom.xml
 
       - name: Build and Test
         run: mvn -B package -X -T 4 --file pom.xml
