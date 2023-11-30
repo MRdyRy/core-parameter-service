@@ -83,9 +83,7 @@ jobs:
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build docker image
-        run: |
-          docker build --file docker/Dockerfile --tag $IMAGE_NAME:$PROJECT_VERSION .
+        run: docker build --file docker/Dockerfile --tag $IMAGE_NAME:$PROJECT_VERSION .
 
       - name: Docker push
-        run: |
-          docker push $IMAGE_NAME:$PROJECT_VERSION
+        run: docker push $IMAGE_NAME:$PROJECT_VERSION
