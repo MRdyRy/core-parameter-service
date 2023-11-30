@@ -81,10 +81,11 @@ jobs:
           PROJECT_VERSION: ${{env.PROJECT_VERSION}}
           FIXED_VERSION: ${{env.FIXED_VERSION}}
           LATEST_VERSION: latest
+          GITHUB_SHA: ${{github.sha}}
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build docker image 
-        run: docker build --file docker/Dockerfile --tag $IMAGE_NAME:$LATEST_VERSION .
+        run: docker build . --file docker/Dockerfile --tag $IMAGE_NAME:$GITHUB_SHA
 
       - name: Docker push
-        run: docker push $IMAGE_NAME:$LATEST_VERSION
+        run: docker push $IMAGE_NAME:$GITHUB_SHA
