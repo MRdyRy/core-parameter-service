@@ -83,8 +83,8 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build docker image
         run: |
-          docker build . --file docker/Dockerfile --tag serfanrud/core-parameter-service:$FIXED_VERSION
+          docker build . --file docker/Dockerfile --tag serfanrud/core-parameter-service:${FIXED_VERSION}
 
       - name: Docker push
         run: |
-          docker push serfanrud/core-parameter-service:$FIXED_VERSION
+          docker push serfanrud/core-parameter-service:${FIXED_VERSION}
