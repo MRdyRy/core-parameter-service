@@ -46,13 +46,15 @@ jobs:
           
       - name: get version
         shell: bash
-        run: echo project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
+        run: echo PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
         
       # - name: verify
       #   run: mvn verify -DskipTests --file pom.xml
 
       - name: Build and Test
         run: mvn -B package -X -T 4 --file pom.xml
+      - name: print_version
+        run: echo ${{env.PROJECT_VERSION}}
         
   push_image:
     runs-on: ubuntu-latest
