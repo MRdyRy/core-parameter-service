@@ -54,8 +54,19 @@ jobs:
       - name: Build and Test
         run: mvn -B package -X -T 4 --file pom.xml
         
-      - name: print_version
+      - name: print version
         run: echo ${{env.PROJECT_VERSION}}
+
+      - name: fixed version
+        env: 
+          version_fix: ""
+        shell: bash
+        run : |
+          version_fix=${{env.PROJECT_VERSION}}
+          version_fix=${version_fix//.}
+          echo FIXED_VERSION=${version_fix} >> $GITHUB_ENV
+      - name: print fixed version
+        run: echo ${{env.FIXED_VERSION}}
         
   push_image:
     runs-on: ubuntu-latest
@@ -69,7 +80,7 @@ jobs:
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build docker image
-        run: docker build . --file docker/Dockerfile --tag serfanrud/core-parameter-service:${{env.PROJECT_VERSION}}
+        run: docker build . --file docker/Dockerfile --tag serfanrud/core-parameter-service:${{env.FIXED_VERSION}}
 
       - name: Docker push
-        run: docker push serfanrud/core-parameter-service:${{env.PROJECT_VERSION}}
+        run: docker push serfanrud/core-parameter-service:${{env.FIXED_VERSION}}
