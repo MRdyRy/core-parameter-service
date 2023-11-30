@@ -77,14 +77,15 @@ jobs:
         env:
           DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+          IMAGE_NAME: serfanrud/core-parameter-service
           PROJECT_VERSION: ${{env.PROJECT_VERSION}}
           FIXED_VERSION: ${{env.FIXED_VERSION}}
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build docker image
         run: |
-          docker build . --file docker/Dockerfile --tag serfanrud/core-parameter-service:${FIXED_VERSION}
+          docker build . --file docker/Dockerfile --tag $IMAGE_NAME:$PROJECT_VERSION
 
       - name: Docker push
         run: |
-          docker push serfanrud/core-parameter-service:${FIXED_VERSION}
+          docker push $IMAGE_NAME:$PROJECT_VERSION
